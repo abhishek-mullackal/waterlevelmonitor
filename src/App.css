@@ -1,0 +1,32 @@
+*{
+    padding-left: 0%;
+    margin-left: 0%;
+    text-align: center;
+    align-items: center;
+}
+.App{
+    align-items: center;
+}
+.heading{
+    font-size: 2rem;
+    
+}
+.tank{
+    width: 100px;
+    height:60vh;
+    border:10px solid #666;
+    border-top: 0;
+    position: relative;
+    color: rgb(255, 255, 255);
+    font-size: large;
+}
+.water{
+    position:absolute;
+    bottom: 0;
+    background-image: linear-gradient(to right,blue,aqua);
+    margin-bottom: 0%;
+}
+
+.info{
+    margin-top: 2rem;
+}

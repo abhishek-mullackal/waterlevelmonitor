@@ -1,76 +1,51 @@
+import React, { useState,useEffect } from "react"
+import { Row,Col } from "react-bootstrap";
+import styles from './App.css'
+import firebase from './firebase'
 
-//firebase sdk
 
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+const App=()=> {
 
-//firebase hooks
+	const [percentage,setPercentage]=useState(10);
+	var perc=percentage+'%';
+	const surfaceArea=100;
+	const height=2;
 
-import { useAuthState} from 'react-firebase-hooks/auth';
-import {useCollectionData} from 'react-firebase-hooks/firestore';
+	useEffect(()=>{
+		readValue();
+	},[])
 
-firebase.initializeApp({
-  apiKey: "AIzaSyALvxlohJ9hI7gKyhb2t69vxzCN9Tad9Zg",
-  authDomain: "waterlevelmonitor-ca990.firebaseapp.com",
-  projectId: "waterlevelmonitor-ca990",
-  storageBucket: "waterlevelmonitor-ca990.appspot.com",
-  messagingSenderId: "104980360186",
-  appId: "1:104980360186:web:11942dbafb5212e1bb1243",
-  measurementId: "G-TZC1HP95KH"
-});
+	const readValue=()=>
+	{
+	firebase.database().ref('pool1/distance').on('value',function(snapshot)
+		{
+			setPercentage(snapshot.val());
+		})
+	}
 
-const auth = firebase.auth();
-const firestore = firebase.firestore();
-function App() {
-  const [user] = useAuthState(auth);
-  return (
-    <div className="App">
-      <header>
+	return (
+		<div className="App container">
+			<div className="heading">Water level monitoring system</div>
+			<Row>
+				<Col md={4} lg={4} xs={2}></Col>
+				<Col md={4} lg={4} xs={8}><div className="tank w-100 mt-4">
+					<div className="water w-100" style={{height:perc}}>{percentage}%</div>
+					
+			</div></Col>
+			<Col md={4} lg={4} xs={2}></Col></Row>
+			<Row>
+				<Col md={4} lg={4} xs={2}></Col>
+				<Col md={4} lg={4} xs={8}>
+					<div className="info">
+						<h4>volume of water : {surfaceArea*height*percentage*10} litres</h4>
 
-      </header>
-      <section>
-        {user?< DispInfo /> : <SignIn />}
-      </section>
-    </div>
-  );
+					</div>
+				</Col>
+				<Col md={4} lg={4} xs={2}></Col>
+
+			</Row>
+		</div>
+	);
 }
 
-function SignIn(){
-  const signInWithGoogle=() => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider);
-  }
-  return(
-    <button onClick={signInWithGoogle}>Sign in with Google</button>
-  )
-}
-function SignOut(){
-  return auth.currentUser && (
-    <button onClick={() => auth.signOut()}>Sign Out</button>
-  )
-}
-function DispInfo(){
-  const infoGen = firestore.collection('levelnfo')
-  const query =infoGen.orderBy('createdAt').limit(25);
-
-  const [readings] = useCollectionData(query,{idField:'id'});
-  return(
-    <>
-      <div>
-        { readings && readings.map(rding => < ShowValue  key={rding.id} reading={rding}/>)}
-      </div>
-    </>
-  )
-}
-function ShowValue(props){
-  const{ text,uid} =props.reading;
-  return (
-    <>
-        <h1>hello</h1>
-        <p>{text}</p>
-    </>
-
-  );
-}
-export default App;
+export default App	
