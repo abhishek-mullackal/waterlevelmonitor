@@ -9,7 +9,7 @@ const App=()=> {
 	const [percentage,setPercentage]=useState(10);
 	var perc=percentage+'%';
 	const surfaceArea=100;
-	const height=2;
+	const height=200;
 
 	useEffect(()=>{
 		readValue();
@@ -19,7 +19,9 @@ const App=()=> {
 	{
 	firebase.database().ref('pool1/distance').on('value',function(snapshot)
 		{
-			setPercentage(snapshot.val());
+			var tmp=snapshot.val();
+			tmp=((height-tmp)/height)*100;
+			setPercentage(tmp);
 		})
 	}
 
@@ -37,7 +39,7 @@ const App=()=> {
 				<Col md={4} lg={4} xs={2}></Col>
 				<Col md={4} lg={4} xs={8}>
 					<div className="info">
-						<h4>volume of water : {surfaceArea*height*percentage*10} litres</h4>
+						<h4>volume of water : {surfaceArea*height*percentage/100} litres</h4>
 
 					</div>
 				</Col>
