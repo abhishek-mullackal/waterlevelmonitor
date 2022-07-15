@@ -20,7 +20,7 @@ const App=()=> {
 	firebase.database().ref('pool1/distance').on('value',function(snapshot)
 		{
 			var tmp=snapshot.val();
-			tmp=((height-tmp)/height)*100;
+			tmp=(((height-tmp)/height))*100;
 			setPercentage(tmp);
 		})
 	}
